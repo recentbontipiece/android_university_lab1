@@ -1,13 +1,17 @@
 package com.codepath.bestsellerlistapp;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.bestsellerlistapp.models.BestSellerBook;
+import com.codepath.bestsellerlistapp.util.Util;
 
 import java.util.List;
 
@@ -19,6 +23,8 @@ public class BestSellerBooksRecyclerViewAdapter extends RecyclerView.Adapter<Bes
 
     private final List<BestSellerBook> books;
     private final OnListFragmentInteractionListener mListener;
+
+    private final String TAG = BestSellerBooksRecyclerViewAdapter.class.getName();
 
     public BestSellerBooksRecyclerViewAdapter(List<BestSellerBook> items, OnListFragmentInteractionListener listener) {
         books = items;
@@ -37,7 +43,9 @@ public class BestSellerBooksRecyclerViewAdapter extends RecyclerView.Adapter<Bes
         holder.mItem = books.get(position);
         holder.mBookTitle.setText(books.get(position).title);
         holder.mBookAuthor.setText(books.get(position).author);
-
+        holder.mRanking.setText(String.valueOf(books.get(position).rank));
+        holder.mBookDescription.setText(books.get(position).description);
+        Util.loadImage(holder.mBookImageView, books.get(position).bookImageUrl,Util.getProgressDrawable(holder.mBookImageView.getContext()));
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,19 +66,27 @@ public class BestSellerBooksRecyclerViewAdapter extends RecyclerView.Adapter<Bes
     public class BookViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mBookTitle;
+        public final TextView mRanking;
+        public final TextView mBookDescription;
         public final TextView mBookAuthor;
+        private final ImageView mBookImageView;
+        public final Button mBuyButton;
         public BestSellerBook mItem;
 
         public BookViewHolder(View view) {
             super(view);
             mView = view;
-            mBookTitle = (TextView) view.findViewById(R.id.book_title);
-            mBookAuthor = (TextView) view.findViewById(R.id.book_author);
+            mBookTitle       = (TextView) view.findViewById(R.id.book_title);
+            mBookAuthor      = (TextView) view.findViewById(R.id.book_author);
+            mRanking         = (TextView) view.findViewById(R.id.ranking);
+            mBookDescription = (TextView) view.findViewById(R.id.book_description);
+            mBuyButton       = (Button)   view.findViewById(R.id.buy_button);
+            mBookImageView   = (ImageView) view.findViewById(R.id.book_image);
         }
 
         @Override
         public String toString() {
-            return mBookTitle.toString() + " '" + mBookAuthor.getText() + "'";
+            return mBookTitle.toString() + " '" + mBookAuthor.getText() + "'" +mRanking.getText()+"'" +mBookImageView.getContext();
         }
     }
 }
